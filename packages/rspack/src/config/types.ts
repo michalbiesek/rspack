@@ -2780,6 +2780,9 @@ export type Optimization = {
    */
   inlineExports?: boolean;
 
+  /** Use direct value assignment for ESM exports instead of getter functions. */
+  constExports?: boolean;
+
   /**
    * Tells Rspack to set process.env.NODE_ENV to a given string value.
    * @default false

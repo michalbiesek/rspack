@@ -3206,6 +3206,8 @@ pub struct OptimizationOptionsBuilder {
   real_content_hash: Option<bool>,
   /// Whether to enable avoid entry iife.
   avoid_entry_iife: Option<bool>,
+  /// Whether to use getter-based exports for live binding semantics.
+  const_exports: Option<bool>,
   /// Node env.
   node_env: Option<String>,
   /// Whether to emit on errors.
@@ -3226,6 +3228,7 @@ impl From<Optimization> for OptimizationOptionsBuilder {
       inline_exports: Some(value.inline_exports),
       concatenate_modules: Some(value.concatenate_modules),
       avoid_entry_iife: Some(value.avoid_entry_iife),
+      const_exports: Some(value.const_exports),
       remove_empty_chunks: None,
       merge_duplicate_chunks: None,
       module_ids: None,
@@ -3258,6 +3261,7 @@ impl From<&mut OptimizationOptionsBuilder> for OptimizationOptionsBuilder {
       concatenate_modules: value.concatenate_modules.take(),
       real_content_hash: value.real_content_hash.take(),
       avoid_entry_iife: value.avoid_entry_iife.take(),
+      const_exports: value.const_exports.take(),
       node_env: value.node_env.take(),
       emit_on_errors: value.emit_on_errors.take(),
       runtime_chunk: value.runtime_chunk.take(),
@@ -3379,6 +3383,14 @@ impl OptimizationOptionsBuilder {
   /// Default set to `false`.
   pub fn avoid_entry_iife(&mut self, value: bool) -> &mut Self {
     self.avoid_entry_iife = Some(value);
+    self
+  }
+
+  /// Set whether to enable const exports.
+  ///
+  /// Default set to `false`.
+  pub fn const_exports(&mut self, value: bool) -> &mut Self {
+    self.const_exports = Some(value);
     self
   }
 
@@ -3648,6 +3660,8 @@ impl OptimizationOptionsBuilder {
         )])));
     }
 
+    let const_exports = d!(self.const_exports, false);
+
     Ok(Optimization {
       side_effects,
       provided_exports,
@@ -3658,6 +3672,7 @@ impl OptimizationOptionsBuilder {
       concatenate_modules,
       avoid_entry_iife,
       real_content_hash,
+      const_exports,
     })
   }
 }

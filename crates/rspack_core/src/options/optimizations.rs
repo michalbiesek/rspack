@@ -126,6 +126,7 @@ pub struct Optimization {
   pub concatenate_modules: bool,
   pub avoid_entry_iife: bool,
   pub real_content_hash: bool,
+  pub const_exports: bool,
 }
 
 pub static DEFAULT_DELIMITER: &str = "~";

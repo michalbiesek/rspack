@@ -18,6 +18,7 @@ pub struct RawOptimizationOptions {
   pub inline_exports: bool,
   pub concatenate_modules: bool,
   pub avoid_entry_iife: bool,
+  pub const_exports: bool,
 }
 
 macro_rules! impl_from_with_bool {
@@ -52,6 +53,7 @@ impl TryFrom<RawOptimizationOptions> for Optimization {
       concatenate_modules: value.concatenate_modules,
       avoid_entry_iife: value.avoid_entry_iife,
       real_content_hash: value.real_content_hash,
+      const_exports: value.const_exports,
     })
   }
 }

@@ -1124,6 +1124,7 @@ const applyOptimizationDefaults = (
   F(optimization, 'sideEffects', () => (production ? true : 'flag'));
   D(optimization, 'mangleExports', production);
   D(optimization, 'inlineExports', production);
+  D(optimization, 'constExports', false);
   D(optimization, 'providedExports', true);
   D(optimization, 'usedExports', production);
   D(optimization, 'innerGraph', production);

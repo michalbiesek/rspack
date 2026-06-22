@@ -336,6 +336,7 @@ module.exports = {
 			    avoidEntryIife: false,
 			    chunkIds: natural,
 			    concatenateModules: false,
+			    constExports: false,
 			    emitOnErrors: true,
 			    inlineExports: false,
 			    innerGraph: false,

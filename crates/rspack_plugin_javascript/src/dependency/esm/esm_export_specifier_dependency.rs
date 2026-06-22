@@ -215,7 +215,10 @@ impl DependencyTemplate for ESMExportSpecifierDependencyTemplate {
     let is_circular_module = compilation
       .circular_modules
       .is_circular_module(&module.identifier());
-    let binding = if matches!(is_circular_module, Some(false)) && dep.const_value.is_some() {
+    let const_exports = compilation.options.optimization.const_exports;
+    let binding = if const_exports
+      || (matches!(is_circular_module, Some(false)) && dep.const_value.is_some())
+    {
       ESMExportBinding::Value(dep.value.clone())
     } else {
       ESMExportBinding::Getter(dep.value.clone())
