@@ -213,7 +213,11 @@ impl DependencyTemplate for ESMExportExpressionDependencyTemplate {
               .collect_vec()
               .join("")
               .into(),
-            ESMExportBinding::Getter(Atom::from(format!("/* export default binding */ {name}"))),
+            if compilation.options.optimization.live_bindings {
+              ESMExportBinding::Getter(Atom::from(format!("/* export default binding */ {name}")))
+            } else {
+              ESMExportBinding::Value(Atom::from(format!("/* export default binding */ {name}")))
+            },
           )],
           is_circular_module,
         )));
@@ -247,7 +251,9 @@ impl DependencyTemplate for ESMExportExpressionDependencyTemplate {
       {
         if let UsedName::Normal(used) = used {
           if supports_const {
-            let binding = if matches!(is_circular_module, Some(false)) {
+            let binding = if !compilation.options.optimization.live_bindings
+              || matches!(is_circular_module, Some(false))
+            {
               ESMExportBinding::Value(DEFAULT_EXPORT.into())
             } else {
               ESMExportBinding::Getter(DEFAULT_EXPORT.into())

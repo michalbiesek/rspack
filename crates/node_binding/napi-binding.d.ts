@@ -2749,6 +2749,7 @@ export interface RawOptimizationOptions {
   inlineExports: boolean
   concatenateModules: boolean
   avoidEntryIife: boolean
+  liveBindings?: boolean
 }
 
 export interface RawOptimizeSharedConfig {

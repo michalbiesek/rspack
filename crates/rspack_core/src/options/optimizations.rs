@@ -126,6 +126,10 @@ pub struct Optimization {
   pub concatenate_modules: bool,
   pub avoid_entry_iife: bool,
   pub real_content_hash: bool,
+  /// When false, all ESM exports use direct value assignment instead of
+  /// getter-based Object.defineProperty. Safe for Node.js server bundles
+  /// where live binding semantics are not needed.
+  pub live_bindings: bool,
 }
 
 pub static DEFAULT_DELIMITER: &str = "~";

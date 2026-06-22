@@ -3207,6 +3207,8 @@ pub struct OptimizationOptionsBuilder {
   real_content_hash: Option<bool>,
   /// Whether to enable avoid entry iife.
   avoid_entry_iife: Option<bool>,
+  /// Whether to use getter-based exports for live binding semantics.
+  live_bindings: Option<bool>,
   /// Node env.
   node_env: Option<String>,
   /// Whether to emit on errors.
@@ -3227,6 +3229,7 @@ impl From<Optimization> for OptimizationOptionsBuilder {
       inline_exports: Some(value.inline_exports),
       concatenate_modules: Some(value.concatenate_modules),
       avoid_entry_iife: Some(value.avoid_entry_iife),
+      live_bindings: Some(value.live_bindings),
       remove_empty_chunks: None,
       merge_duplicate_chunks: None,
       module_ids: None,
@@ -3259,6 +3262,7 @@ impl From<&mut OptimizationOptionsBuilder> for OptimizationOptionsBuilder {
       concatenate_modules: value.concatenate_modules.take(),
       real_content_hash: value.real_content_hash.take(),
       avoid_entry_iife: value.avoid_entry_iife.take(),
+      live_bindings: value.live_bindings.take(),
       node_env: value.node_env.take(),
       emit_on_errors: value.emit_on_errors.take(),
       runtime_chunk: value.runtime_chunk.take(),
@@ -3380,6 +3384,14 @@ impl OptimizationOptionsBuilder {
   /// Default set to `false`.
   pub fn avoid_entry_iife(&mut self, value: bool) -> &mut Self {
     self.avoid_entry_iife = Some(value);
+    self
+  }
+
+  /// Set whether to use getter-based exports for live binding semantics.
+  ///
+  /// Default set to `true`. Set to `false` for Node.js server bundles.
+  pub fn live_bindings(&mut self, value: bool) -> &mut Self {
+    self.live_bindings = Some(value);
     self
   }
 
@@ -3649,6 +3661,8 @@ impl OptimizationOptionsBuilder {
         )])));
     }
 
+    let live_bindings = d!(self.live_bindings, true);
+
     Ok(Optimization {
       side_effects,
       provided_exports,
@@ -3659,6 +3673,7 @@ impl OptimizationOptionsBuilder {
       concatenate_modules,
       avoid_entry_iife,
       real_content_hash,
+      live_bindings,
     })
   }
 }

@@ -880,10 +880,13 @@ impl ESMExportImportedSpecifierDependency {
       .compilation
       .circular_modules
       .is_circular_module(&ctxt.module.identifier());
-    let export_map = vec![(
-      key.into(),
-      ESMExportBinding::Getter(format!("/* {comment} */ {return_value}").into()),
-    )];
+    let live_bindings = ctxt.compilation.options.optimization.live_bindings;
+    let binding = if live_bindings {
+      ESMExportBinding::Getter(format!("/* {comment} */ {return_value}").into())
+    } else {
+      ESMExportBinding::Value(format!("/* {comment} */ {return_value}").into())
+    };
+    let export_map = vec![(key.into(), binding)];
     ESMExportInitFragment::new(
       ctxt.module.get_exports_argument(),
       export_map,

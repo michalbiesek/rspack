@@ -2793,6 +2793,14 @@ export type Optimization = {
   inlineExports?: boolean;
 
   /**
+   * Use getter-based exports for ESM live binding semantics. Set to false for
+   * Node.js server bundles where live bindings are not needed — exports will use
+   * direct value assignment, reducing V8 deoptimization overhead under sustained load.
+   * @default true
+   */
+  liveBindings?: boolean;
+
+  /**
    * Tells Rspack to set process.env.NODE_ENV to a given string value.
    * @default false
    */
